@@ -212,11 +212,13 @@ const toggleCategory = (category: string) => {
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  background: transparent;
+  background: var(--color-bg-primary);
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .category-item::before {
@@ -232,6 +234,7 @@ const toggleCategory = (category: string) => {
 
 .category-item:hover {
   background: var(--color-bg-secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .category-item:hover::before {
@@ -240,6 +243,7 @@ const toggleCategory = (category: string) => {
 
 .category-item.active {
   background: var(--color-primary-lighter);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .category-item.active::before {
