@@ -44,7 +44,7 @@ export const categories = {
   selectors: { label: '选择器', icon: 'fa-crosshairs', count: 0 },
   'at-rules': { label: 'At-Rules', icon: 'fa-at', count: 0 },
   units: { label: '单位', icon: 'fa-ruler-combined', count: 0 },
-  functions: { label: '函数', icon: 'fa-function', count: 0 },
+  functions: { label: '函数', icon: 'fa-code', count: 0 },
   other: { label: '其他', icon: 'fa-ellipsis-h', count: 0 },
 };
 

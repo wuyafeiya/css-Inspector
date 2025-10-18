@@ -193,23 +193,13 @@ const toggleCategory = (category: string) => {
   flex: 1;
   overflow-y: auto;
   padding: 4px 0;
+  /* 隐藏滚动条但保留滚动功能 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 .category-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.category-list::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-.category-list::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 2px;
-}
-
-.category-list::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .category-section {
@@ -307,13 +297,13 @@ const toggleCategory = (category: string) => {
 }
 
 .category-count {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-primary);
   background: var(--color-bg-tertiary);
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 10px;
-  min-width: 28px;
+  min-width: 32px;
   text-align: center;
 }
 
