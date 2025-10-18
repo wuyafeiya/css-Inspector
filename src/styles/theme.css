@@ -163,3 +163,70 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
+
+/* Splitpanes 自定义样式 */
+.splitpanes__splitter {
+  background-color: var(--color-border-primary);
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.splitpanes__splitter:hover {
+  background-color: var(--color-primary);
+}
+
+/* 垂直分割线（左右） */
+.splitpanes--vertical > .splitpanes__splitter {
+  width: 4px;
+  border-left: 1px solid var(--color-border-primary);
+  border-right: 1px solid var(--color-border-primary);
+  cursor: col-resize;
+}
+
+.splitpanes--vertical > .splitpanes__splitter:hover {
+  border-color: var(--color-primary);
+}
+
+/* 水平分割线（上下） */
+.splitpanes--horizontal > .splitpanes__splitter {
+  height: 4px;
+  border-top: 1px solid var(--color-border-primary);
+  border-bottom: 1px solid var(--color-border-primary);
+  cursor: row-resize;
+}
+
+.splitpanes--horizontal > .splitpanes__splitter:hover {
+  border-color: var(--color-primary);
+}
+
+/* 分割线中间的拖拽指示器 */
+.splitpanes__splitter::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 2px;
+}
+
+.splitpanes--vertical > .splitpanes__splitter::before {
+  width: 2px;
+  height: 30px;
+}
+
+.splitpanes--horizontal > .splitpanes__splitter::before {
+  width: 30px;
+  height: 2px;
+}
+
+.splitpanes__splitter:hover::before {
+  opacity: 0.5;
+  background-color: white;
+}
+
+.splitpanes__pane {
+  transition: none !important;
+}

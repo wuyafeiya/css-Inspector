@@ -245,37 +245,41 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
   border: 1px solid var(--color-border-primary);
   border-radius: 6px;
   font-family: 'Courier New', monospace;
-  font-size: 13px;
-  color: var(--color-primary);
+  font-size: 14px;
+  color: var(--color-text-primary);
   overflow-x: auto;
+  font-weight: 500;
 }
 
 .badge {
   display: inline-block;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .badge-yes {
-  background: #d1fae5;
-  color: #065f46;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .badge-no {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .category-badge,
 .type-badge {
   display: inline-block;
-  padding: 4px 12px;
+  padding: 6px 14px;
   background: var(--color-primary-lighter);
   color: var(--color-primary);
+  border: 1px solid var(--color-primary-alpha);
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -290,11 +294,12 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border-primary);
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: 'Courier New', monospace;
   color: var(--color-text-primary);
   transition: all 0.2s;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .value-chip:hover {
@@ -319,8 +324,9 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
 
 .example-item code {
   font-family: 'Courier New', monospace;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-text-primary);
+  font-weight: 500;
 }
 
 .empty-state {

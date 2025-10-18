@@ -12,26 +12,30 @@
     </header>
 
     <div class="app-layout">
-      <!-- 左侧：属性库 -->
-      <aside class="property-library-section">
-        <PropertyLibrary />
-      </aside>
+      <Splitpanes>
+        <!-- 左侧：属性库 -->
+        <Pane :size="20" min-size="15">
+          <PropertyLibrary />
+        </Pane>
 
-      <!-- 中间：属性详情 -->
-      <section class="property-detail-section">
-        <PropertyDetail />
-      </section>
+        <!-- 中间：属性详情 -->
+        <Pane :size="22" min-size="18">
+          <PropertyDetail />
+        </Pane>
 
-      <!-- 右侧：预览面板 -->
-      <section class="preview-panel-section">
-        <PreviewPanel />
-      </section>
+        <!-- 右侧：预览面板 -->
+        <Pane :size="58" min-size="30">
+          <PreviewPanel />
+        </Pane>
+      </Splitpanes>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 import PropertyLibrary from './components/PropertyLibrary/PropertyLibrary.vue'
 import PropertyDetail from './components/PropertyDetail/PropertyDetail.vue'
 import PreviewPanel from './components/Preview/PreviewPanel.vue'
@@ -100,9 +104,6 @@ onMounted(() => {
 
 .app-layout {
   flex: 1;
-  display: grid;
-  grid-template-columns: 320px 360px 1fr;
-  gap: 0;
   overflow: hidden;
 }
 
@@ -116,13 +117,13 @@ onMounted(() => {
 /* 响应式设计 */
 @media (max-width: 1400px) {
   .app-layout {
-    grid-template-columns: 300px 340px 1fr;
+    /* Splitpanes 会自动处理 */
   }
 }
 
 @media (max-width: 1200px) {
   .app-layout {
-    grid-template-columns: 280px 320px 1fr;
+    /* Splitpanes 会自动处理 */
   }
 }
 </style>
