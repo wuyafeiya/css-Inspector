@@ -343,15 +343,6 @@ const toggleCategory = (category: string) => {
   border-left: 3px solid var(--color-border-primary);
   margin-left: 16px;
   padding: 4px 0;
-  max-height: 400px;
-  overflow-y: auto;
-  /* 隐藏滚动条但保留滚动功能 */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.property-items::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
 }
 
 /* 选择器迷你项 */
@@ -415,7 +406,7 @@ const toggleCategory = (category: string) => {
 
 .expand-enter-to,
 .expand-leave-from {
-  max-height: 2000px;
+  max-height: 5000px;
   opacity: 1;
 }
 </style>
