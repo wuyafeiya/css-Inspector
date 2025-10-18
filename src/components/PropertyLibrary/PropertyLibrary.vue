@@ -2,23 +2,18 @@
   <div class="property-library">
     <div class="library-header">
       <h2>CSS 属性库</h2>
-      <span class="property-count">{{ totalCount }}</span>
     </div>
 
     <PropertySearch />
-    <CategoryFilter />
+    <div class="category-filter-wrapper">
+      <CategoryFilter />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { metadata } from '../../data/cssData';
 import PropertySearch from './PropertySearch.vue';
 import CategoryFilter from './CategoryFilter.vue';
-
-const totalCount = computed(() => {
-  return `${metadata.totalProperties} 属性 + ${metadata.totalSelectors} 选择器 + ${metadata.totalAtRules} 规则 + ${metadata.totalUnits} 单位 + ${metadata.totalTypes} 类型`;
-});
 </script>
 
 <style scoped>
@@ -33,7 +28,7 @@ const totalCount = computed(() => {
 
 .library-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 14px 16px;
   background: var(--header-gradient);
@@ -48,12 +43,10 @@ const totalCount = computed(() => {
   margin: 0;
 }
 
-.property-count {
-  font-size: 10px;
-  color: var(--header-text);
-  background: var(--color-bg-tertiary);
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 500;
+.category-filter-wrapper {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 </style>
