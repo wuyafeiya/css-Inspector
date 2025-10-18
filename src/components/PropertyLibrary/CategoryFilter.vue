@@ -109,7 +109,6 @@
 import { ref, computed } from 'vue';
 import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions, allCSSData } from '../../data/cssData';
 import PropertyItem from './PropertyItem.vue';
-import type { CSSCategory } from '../../types';
 
 // 改为单选模式：每次只能展开一个分类
 const expandedCategory = ref<string | null>('all');
