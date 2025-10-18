@@ -4,7 +4,7 @@
       <i class="fas fa-filter"></i>
       <span>分类筛选</span>
     </div>
-    <div class="category-list">
+    <div class="category-list" ref="categoryListRef">
       <!-- 全部分类 -->
       <div class="category-section">
         <button
@@ -112,6 +112,7 @@ import PropertyItem from './PropertyItem.vue';
 
 // 改为单选模式：每次只能展开一个分类
 const expandedCategory = ref<string | null>('all');
+const categoryListRef = ref<HTMLElement | null>(null);
 
 const allProperties = computed(() => cssProperties);
 const allSelectors = computed(() => cssSelectors);
@@ -156,6 +157,10 @@ const toggleCategory = (category: string) => {
     expandedCategory.value = null;
   } else {
     expandedCategory.value = category;
+    // 切换分类时，滚动到顶部
+    if (categoryListRef.value) {
+      categoryListRef.value.scrollTop = 0;
+    }
   }
 };
 </script>
