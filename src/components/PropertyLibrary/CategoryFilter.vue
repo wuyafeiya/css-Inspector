@@ -212,13 +212,11 @@ const toggleCategory = (category: string) => {
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  background: var(--color-bg-primary);
+  background: transparent;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  position: relative;
 }
 
 .category-item::before {
@@ -234,7 +232,6 @@ const toggleCategory = (category: string) => {
 
 .category-item:hover {
   background: var(--color-bg-secondary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .category-item:hover::before {
@@ -243,7 +240,6 @@ const toggleCategory = (category: string) => {
 
 .category-item.active {
   background: var(--color-primary-lighter);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .category-item.active::before {
@@ -347,6 +343,15 @@ const toggleCategory = (category: string) => {
   border-left: 3px solid var(--color-border-primary);
   margin-left: 16px;
   padding: 4px 0;
+  max-height: 400px;
+  overflow-y: auto;
+  /* 隐藏滚动条但保留滚动功能 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.property-items::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* 选择器迷你项 */
