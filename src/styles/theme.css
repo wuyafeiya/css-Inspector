@@ -1,0 +1,165 @@
+/* 全局 CSS 变量 - 主题系统 */
+
+/* ===== 浅色主题 ===== */
+.light-theme {
+  /* 主色 - 现代蓝色 */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-dark: #1e40af;
+  --color-primary-light: #dbeafe;
+  --color-primary-lighter: #eff6ff;
+  --color-primary-alpha: rgba(37, 99, 235, 0.2);
+
+  /* 背景色 */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f9fafb;
+  --color-bg-tertiary: #f3f4f6;
+  --color-bg-elevated: #ffffff;
+
+  /* 文字颜色 */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-text-light: #f3f4f6;
+
+  /* 边框颜色 */
+  --color-border-primary: #e5e7eb;
+  --color-border-secondary: #d1d5db;
+  --color-border-tertiary: #f3f4f6;
+  --color-border-focus: #2563eb;
+
+  /* 状态颜色 */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-danger-light: #fee2e2;
+  --color-danger-lighter: #fecaca;
+
+  /* 代码编辑器 */
+  --code-bg: #1f2937;
+  --code-header-bg: #111827;
+  --code-border: #374151;
+  --code-button-bg: #374151;
+  --code-button-hover: #4b5563;
+  --code-text: #e5e7eb;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  /* 滚动条 */
+  --scrollbar-track: #f1f3f5;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
+
+  /* 特殊 */
+  --header-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  --header-text: #111827;
+  --header-text-secondary: rgba(17, 24, 39, 0.7);
+  --card-bg: #ffffff;
+  --input-bg: #f9fafb;
+}
+
+/* ===== 暗色主题 ===== */
+.dark-theme {
+  /* 主色 - 亮蓝色 */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #1e3a5f;
+  --color-primary-lighter: #172a46;
+  --color-primary-alpha: rgba(59, 130, 246, 0.2);
+
+  /* 背景色 */
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #334155;
+  --color-bg-elevated: #1e293b;
+
+  /* 文字颜色 */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-light: #f1f5f9;
+
+  /* 边框颜色 */
+  --color-border-primary: #334155;
+  --color-border-secondary: #475569;
+  --color-border-tertiary: #1e293b;
+  --color-border-focus: #3b82f6;
+
+  /* 状态颜色 */
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-light: rgba(248, 113, 113, 0.2);
+  --color-danger-lighter: rgba(248, 113, 113, 0.3);
+
+  /* 代码编辑器 */
+  --code-bg: #0a0f1e;
+  --code-header-bg: #030712;
+  --code-border: #1e293b;
+  --code-button-bg: #1e293b;
+  --code-button-hover: #334155;
+  --code-text: #cbd5e1;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.2);
+
+  /* 滚动条 */
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: #475569;
+  --scrollbar-thumb-hover: #64748b;
+
+  /* 特殊 */
+  --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --header-text: #f1f5f9;
+  --header-text-secondary: rgba(241, 245, 249, 0.85);
+  --card-bg: #1e293b;
+  --input-bg: #0f172a;
+}
+
+/* 通用样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
