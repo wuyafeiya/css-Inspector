@@ -71,6 +71,9 @@ cssFunctions.forEach(() => {
   categories.functions.count++;
 });
 
+// 为 color 分类添加 Tailwind 颜色数量（20 个颜色系列 × 11 个色阶 = 220）
+categories.color.count = 220;
+
 // 元数据
 export const metadata = processedData.metadata;
 

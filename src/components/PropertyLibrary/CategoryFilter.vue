@@ -73,6 +73,9 @@
 
         <transition name="expand">
           <div v-if="expandedCategory === key" class="property-items">
+            <!-- 颜色分类显示颜色面板 -->
+            <ColorPalette v-if="key === 'color'" />
+
             <!-- 显示属性 -->
             <PropertyItem
               v-for="property in getCategoryProperties(key)"
@@ -109,6 +112,7 @@
 import { ref, computed } from 'vue';
 import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions, allCSSData } from '../../data/cssData';
 import PropertyItem from './PropertyItem.vue';
+import ColorPalette from './ColorPalette.vue';
 
 // 改为单选模式：每次只能展开一个分类
 const expandedCategory = ref<string | null>('all');
