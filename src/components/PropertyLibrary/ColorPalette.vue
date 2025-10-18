@@ -19,16 +19,48 @@
         </div>
       </div>
     </div>
+
+    <!-- 复制成功提示 -->
+    <transition name="toast">
+      <div v-if="showToast" class="toast-notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+          <div class="toast-title">复制成功</div>
+          <div class="toast-message">{{ copiedColorName }}: {{ copiedColorHex }}</div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { tailwindColors } from '../../data/tailwindColors';
+
+const showToast = ref(false);
+const copiedColorName = ref('');
+const copiedColorHex = ref('');
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
 
 const copyColor = (hex: string, name: string) => {
   // 复制颜色值到剪贴板
   navigator.clipboard.writeText(hex).then(() => {
-    console.log(`已复制: ${name} (${hex})`);
+    // 更新提示信息
+    copiedColorName.value = name;
+    copiedColorHex.value = hex;
+
+    // 显示提示
+    showToast.value = true;
+
+    // 清除之前的定时器
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+    }
+
+    // 2秒后自动隐藏
+    toastTimer = setTimeout(() => {
+      showToast.value = false;
+    }, 2000);
   });
 };
 </script>
@@ -39,6 +71,7 @@ const copyColor = (hex: string, name: string) => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
 }
 
 .color-family {
@@ -98,5 +131,80 @@ const copyColor = (hex: string, name: string) => {
 .color-item[style*="#e"] .shade-label {
   color: #333;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Toast 通知 */
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-success);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.toast-notification i {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.toast-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.toast-message {
+  font-size: 12px;
+  opacity: 0.95;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Toast 动画 */
+.toast-enter-active {
+  animation: toast-in 0.3s ease-out;
+}
+
+.toast-leave-active {
+  animation: toast-out 0.3s ease-in;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 }
 </style>

@@ -111,47 +111,82 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions, allCSSData } from '../../data/cssData';
+import { useCSSEditor } from '../../composables/useCSSEditor';
 import PropertyItem from './PropertyItem.vue';
 import ColorPalette from './ColorPalette.vue';
 
+const { searchQuery } = useCSSEditor();
+
 // 改为单选模式：每次只能展开一个分类
-const expandedCategory = ref<string | null>('all');
+const expandedCategory = ref<string | null>(null);
 const categoryListRef = ref<HTMLElement | null>(null);
 
-const allProperties = computed(() => cssProperties);
-const allSelectors = computed(() => cssSelectors);
-const allAtRules = computed(() => cssAtRules);
-const allUnits = computed(() => cssUnits);
-const allFunctions = computed(() => cssFunctions);
+// 搜索过滤函数
+const filterBySearch = <T extends { name: string; description?: string }>(items: T[]): T[] => {
+  if (!searchQuery.value) return items;
+  const query = searchQuery.value.toLowerCase();
+  return items.filter(item =>
+    item.name.toLowerCase().includes(query) ||
+    (item.description && item.description.toLowerCase().includes(query))
+  );
+};
+
+const allProperties = computed(() => filterBySearch(cssProperties));
+const allSelectors = computed(() => filterBySearch(cssSelectors));
+const allAtRules = computed(() => filterBySearch(cssAtRules));
+const allUnits = computed(() => filterBySearch(cssUnits));
+const allFunctions = computed(() => filterBySearch(cssFunctions));
 
 const totalCount = computed(() => {
-  return allCSSData.length;
+  return allProperties.value.length +
+         allSelectors.value.length +
+         allAtRules.value.length +
+         allUnits.value.length +
+         allFunctions.value.length;
 });
 
 const getCategoryProperties = (category: string) => {
   if (category === 'selectors' || category === 'at-rules' || category === 'units' || category === 'functions') {
     return [];
   }
-  return cssProperties.filter(p => p.category === category);
+  const filtered = cssProperties.filter(p => p.category === category);
+  return filterBySearch(filtered);
 };
 
 const getCategoryItems = (category: string) => {
+  let items: any[] = [];
   switch (category) {
     case 'selectors':
-      return cssSelectors;
+      items = cssSelectors;
+      break;
     case 'at-rules':
-      return cssAtRules;
+      items = cssAtRules;
+      break;
     case 'units':
-      return cssUnits;
+      items = cssUnits;
+      break;
     case 'functions':
-      return cssFunctions;
+      items = cssFunctions;
+      break;
     default:
       return [];
   }
+  return filterBySearch(items);
 };
 
 const getCategoryCount = (category: string) => {
-  return categories[category]?.count || 0;
+  // 特殊处理 color 分类（包含 Tailwind 颜色）
+  if (category === 'color') {
+    const colorProperties = getCategoryProperties('color').length;
+    // 如果有搜索，只返回匹配的属性数量；否则返回属性数量 + 220 个 Tailwind 颜色
+    return searchQuery.value ? colorProperties : colorProperties + 220;
+  }
+
+  if (category === 'selectors') return getCategoryItems('selectors').length;
+  if (category === 'at-rules') return getCategoryItems('at-rules').length;
+  if (category === 'units') return getCategoryItems('units').length;
+  if (category === 'functions') return getCategoryItems('functions').length;
+  return getCategoryProperties(category).length;
 };
 
 const toggleCategory = (category: string) => {

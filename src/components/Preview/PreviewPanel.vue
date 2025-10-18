@@ -54,6 +54,17 @@
         </div>
       </Pane>
     </Splitpanes>
+
+    <!-- 复制成功提示 -->
+    <transition name="toast">
+      <div v-if="showToast" class="toast-notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+          <div class="toast-title">复制成功</div>
+          <div class="toast-message">已复制 {{ currentFile }} 的代码到剪贴板</div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -77,6 +88,10 @@ const files = [
 
 // 当前文件
 const currentFile = ref('index.html');
+
+// Toast 状态
+const showToast = ref(false);
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
 
 // HTML 代码
 const htmlCode = ref(`<!DOCTYPE html>
@@ -152,7 +167,19 @@ const copyCode = async () => {
   try {
     const code = currentFile.value === 'index.html' ? htmlCode.value : cssCode.value;
     await navigator.clipboard.writeText(code);
-    alert('代码已复制到剪贴板！');
+
+    // 显示 Toast
+    showToast.value = true;
+
+    // 清除之前的定时器
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+    }
+
+    // 2秒后自动隐藏
+    toastTimer = setTimeout(() => {
+      showToast.value = false;
+    }, 2000);
   } catch (err) {
     console.error('复制失败:', err);
   }
@@ -252,5 +279,76 @@ const copyCode = async () => {
   height: 100%;
   border: none;
   background: white;
+}
+
+/* Toast 通知 */
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-success);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.toast-notification i {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.toast-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.toast-message {
+  font-size: 12px;
+  opacity: 0.95;
+}
+
+/* Toast 动画 */
+.toast-enter-active {
+  animation: toast-in 0.3s ease-out;
+}
+
+.toast-leave-active {
+  animation: toast-out 0.3s ease-in;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 }
 </style>

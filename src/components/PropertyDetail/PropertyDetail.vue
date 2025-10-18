@@ -30,13 +30,32 @@
         <!-- 语法 -->
         <div v-if="selectedProperty.syntax" class="property-section">
           <h4><i class="fas fa-code"></i> 语法</h4>
-          <code class="syntax-code">{{ selectedProperty.syntax }}</code>
+          <div class="syntax-wrapper">
+            <pre class="syntax-code" v-html="formatSyntax(selectedProperty.syntax)"></pre>
+          </div>
         </div>
 
         <!-- 初始值 -->
         <div v-if="selectedProperty.initial" class="property-section">
           <h4><i class="fas fa-play"></i> 初始值</h4>
-          <code class="initial-value">{{ selectedProperty.initial }}</code>
+          <!-- 如果是数组（简写属性的子属性列表） -->
+          <div v-if="Array.isArray(selectedProperty.initial)" class="sub-properties">
+            <div class="sub-properties-hint">此简写属性包含以下子属性：</div>
+            <div class="sub-properties-list">
+              <a
+                v-for="subProp in selectedProperty.initial"
+                :key="subProp"
+                class="sub-property-chip"
+                @click="searchSubProperty(subProp)"
+                :title="`点击查看 ${subProp}`"
+              >
+                <i class="fas fa-link"></i>
+                {{ subProp }}
+              </a>
+            </div>
+          </div>
+          <!-- 如果是字符串 -->
+          <code v-else class="initial-value">{{ selectedProperty.initial }}</code>
         </div>
 
         <!-- 继承性 -->
@@ -78,7 +97,18 @@
           <h4><i class="fas fa-lightbulb"></i> 示例</h4>
           <div class="examples">
             <div class="example-item">
-              <code>{{ selectedProperty.name }}: {{ getExampleValue(selectedProperty) }};</code>
+              <code v-if="!Array.isArray(selectedProperty.initial)">
+                {{ selectedProperty.name }}: {{ getExampleValue(selectedProperty) }};
+              </code>
+              <div v-else class="shorthand-example">
+                <div class="example-hint">
+                  <i class="fas fa-info-circle"></i>
+                  这是一个简写属性，可以同时设置以下子属性：
+                </div>
+                <code class="shorthand-syntax">
+                  {{ selectedProperty.name }}: {{ getShorthandExample(selectedProperty.initial) }};
+                </code>
+              </div>
             </div>
           </div>
         </div>
@@ -97,15 +127,21 @@
 import { computed } from 'vue';
 import { useCSSEditor } from '../../composables/useCSSEditor';
 import { categories } from '../../data/cssData';
+import { cssProperties } from '../../data/cssData';
 import type { CSSPropertyDefinition } from '../../types';
 
-const { selectedProperty } = useCSSEditor();
+const { selectedProperty, selectProperty } = useCSSEditor();
 
 const getCategoryLabel = (category: string) => {
   return categories[category]?.label || category;
 };
 
 const getExampleValue = (property: CSSPropertyDefinition) => {
+  // 如果 initial 是数组，不在这里处理
+  if (Array.isArray(property.initial)) {
+    return '';
+  }
+
   if (property.possibleValues && property.possibleValues.length > 0) {
     return property.possibleValues[0];
   }
@@ -130,6 +166,82 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
     default:
       return 'auto';
   }
+};
+
+// 为简写属性生成示例
+const getShorthandExample = (subProperties: string[]) => {
+  // 根据子属性生成示例值
+  const exampleMap: Record<string, string> = {
+    'border-width': '2px',
+    'border-style': 'solid',
+    'border-color': '#3b82f6',
+    'color': '#333',
+    'background-color': '#f5f5f5',
+    'background-image': 'url(image.jpg)',
+    'background-position': 'center',
+    'background-size': 'cover',
+    'background-repeat': 'no-repeat',
+    'background-origin': 'padding-box',
+    'background-clip': 'border-box',
+    'background-attachment': 'scroll',
+    'margin-top': '10px',
+    'margin-right': '10px',
+    'margin-bottom': '10px',
+    'margin-left': '10px',
+    'padding-top': '10px',
+    'padding-right': '10px',
+    'padding-bottom': '10px',
+    'padding-left': '10px',
+  };
+
+  // 生成示例值
+  const values = subProperties.map(prop => {
+    return exampleMap[prop] || '10px';
+  });
+
+  return values.join(' ');
+};
+
+// 点击子属性，查找并显示该属性
+const searchSubProperty = (subPropName: string) => {
+  const property = cssProperties.find(p => p.name === subPropName);
+  if (property) {
+    selectProperty(property);
+  }
+};
+
+// 格式化和高亮 CSS 语法
+const formatSyntax = (syntax: string) => {
+  if (!syntax) return '';
+
+  let formatted = syntax;
+
+  // 在长语法中添加换行（在 | 或 || 前后）
+  if (syntax.length > 80) {
+    formatted = formatted
+      .replace(/\s*\|\|\s*/g, ' <span class="syntax-or">||</span><br/>  ')
+      .replace(/\s*\|\s*/g, ' <span class="syntax-or">|</span><br/>  ');
+  } else {
+    formatted = formatted
+      .replace(/\s*\|\|\s*/g, ' <span class="syntax-or">||</span> ')
+      .replace(/\s*\|\s*/g, ' <span class="syntax-or">|</span> ');
+  }
+
+  // 高亮不同的语法元素
+  formatted = formatted
+    // 引用的属性名 <'property'>
+    .replace(/<'([^']+)'>/g, '<span class="syntax-property">&lt;\'$1\'&gt;</span>')
+    // 类型引用 <type>
+    .replace(/<([^>'\s]+)>/g, '<span class="syntax-type">&lt;$1&gt;</span>')
+    // 量词 ?, +, *, #, {n}, {n,m}
+    .replace(/([?+*#]|\{[^}]+\})/g, '<span class="syntax-quantifier">$1</span>')
+    // 方括号（分组）
+    .replace(/\[/g, '<span class="syntax-bracket">[</span>')
+    .replace(/\]/g, '<span class="syntax-bracket">]</span>')
+    // 关键字（用单引号包围的）
+    .replace(/'([^']+)'/g, '<span class="syntax-keyword">\'$1\'</span>');
+
+  return formatted;
 };
 </script>
 
@@ -237,7 +349,57 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
   margin: 0;
 }
 
-.syntax-code,
+.syntax-wrapper {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  border-left: 3px solid var(--color-primary);
+}
+
+.syntax-code {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.8;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 语法高亮样式 */
+.syntax-code :deep(.syntax-property) {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.syntax-code :deep(.syntax-type) {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.syntax-code :deep(.syntax-or) {
+  color: #f59e0b;
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+.syntax-code :deep(.syntax-quantifier) {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+.syntax-code :deep(.syntax-bracket) {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.syntax-code :deep(.syntax-keyword) {
+  color: #ef4444;
+  font-weight: 500;
+}
+
 .initial-value {
   display: block;
   padding: 12px;
@@ -249,6 +411,65 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
   color: var(--color-text-primary);
   overflow-x: auto;
   font-weight: 500;
+}
+
+/* 子属性展示 */
+.sub-properties {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  padding: 14px;
+  border-left: 3px solid var(--color-primary);
+}
+
+.sub-properties-hint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.sub-properties-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sub-property-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.sub-property-chip i {
+  font-size: 11px;
+  color: var(--color-primary);
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.sub-property-chip:hover {
+  background: var(--color-primary-lighter);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.sub-property-chip:hover i {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 .badge {
@@ -327,6 +548,37 @@ const getExampleValue = (property: CSSPropertyDefinition) => {
   font-size: 14px;
   color: var(--color-text-primary);
   font-weight: 500;
+}
+
+/* 简写属性示例 */
+.shorthand-example {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.example-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.example-hint i {
+  color: var(--color-info);
+  font-size: 13px;
+}
+
+.shorthand-syntax {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  display: block;
 }
 
 .empty-state {
