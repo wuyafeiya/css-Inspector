@@ -29,11 +29,11 @@
               :property="property"
             />
             <div
-              v-for="item in [...allSelectors, ...allAtRules, ...allUnits, ...allTypes]"
+              v-for="item in [...allSelectors, ...allAtRules, ...allUnits, ...allFunctions]"
               :key="item.name"
               class="selector-item-mini"
             >
-              <i :class="['fas', item.category === 'selectors' ? 'fa-crosshairs' : item.category === 'at-rules' ? 'fa-at' : item.category === 'units' ? 'fa-ruler-combined' : 'fa-code']"></i>
+              <i :class="['fas', item.category === 'selectors' ? 'fa-crosshairs' : item.category === 'at-rules' ? 'fa-at' : item.category === 'units' ? 'fa-ruler-combined' : 'fa-function']"></i>
               <span class="selector-name">{{ item.name }}</span>
               <a
                 v-if="item.mdn"
@@ -80,13 +80,13 @@
               :property="property"
             />
 
-            <!-- 显示特殊类别（选择器、规则、单位、类型） -->
+            <!-- 显示特殊类别（选择器、规则、单位、函数） -->
             <div
               v-for="item in getCategoryItems(key)"
               :key="item.name"
               class="selector-item-mini"
             >
-              <i :class="['fas', key === 'selectors' ? 'fa-crosshairs' : key === 'at-rules' ? 'fa-at' : key === 'units' ? 'fa-ruler-combined' : 'fa-code']"></i>
+              <i :class="['fas', key === 'selectors' ? 'fa-crosshairs' : key === 'at-rules' ? 'fa-at' : key === 'units' ? 'fa-ruler-combined' : 'fa-function']"></i>
               <span class="selector-name">{{ item.name }}</span>
               <a
                 v-if="item.mdn"
@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssTypes, allCSSData } from '../../data/cssData';
+import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions, allCSSData } from '../../data/cssData';
 import PropertyItem from './PropertyItem.vue';
 import type { CSSCategory } from '../../types';
 
@@ -118,14 +118,14 @@ const allProperties = computed(() => cssProperties);
 const allSelectors = computed(() => cssSelectors);
 const allAtRules = computed(() => cssAtRules);
 const allUnits = computed(() => cssUnits);
-const allTypes = computed(() => cssTypes);
+const allFunctions = computed(() => cssFunctions);
 
 const totalCount = computed(() => {
   return allCSSData.length;
 });
 
 const getCategoryProperties = (category: string) => {
-  if (category === 'selectors' || category === 'at-rules' || category === 'units' || category === 'types') {
+  if (category === 'selectors' || category === 'at-rules' || category === 'units' || category === 'functions') {
     return [];
   }
   return cssProperties.filter(p => p.category === category);
@@ -139,8 +139,8 @@ const getCategoryItems = (category: string) => {
       return cssAtRules;
     case 'units':
       return cssUnits;
-    case 'types':
-      return cssTypes;
+    case 'functions':
+      return cssFunctions;
     default:
       return [];
   }
