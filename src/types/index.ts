@@ -11,7 +11,7 @@ export type CSSPropertyType =
   | 'time'
   | 'multi-value';
 
-// CSS 数据项分类（属性 + 选择器 + 规则 + 单位 + 类型）
+// CSS 数据项分类（属性 + 选择器 + 规则 + 单位 + 函数）
 export type CSSCategory =
   | 'layout'
   | 'size'
@@ -25,11 +25,11 @@ export type CSSCategory =
   | 'selectors'
   | 'at-rules'
   | 'units'
-  | 'types'
+  | 'functions'
   | 'other';
 
 // CSS 属性分类（向后兼容）
-export type CSSPropertyCategory = Exclude<CSSCategory, 'selectors' | 'at-rules' | 'units' | 'types'>;
+export type CSSPropertyCategory = Exclude<CSSCategory, 'selectors' | 'at-rules' | 'units' | 'functions'>;
 
 // CSS 属性定义
 export interface CSSPropertyDefinition {
@@ -75,21 +75,22 @@ export interface CSSUnitDefinition {
   mdn?: string;
 }
 
-// CSS 类型定义
-export interface CSSTypeDefinition {
+// CSS 函数定义
+export interface CSSFunctionDefinition {
   name: string;
+  syntax: string;
   description: string;
-  category: 'types';
+  category: 'functions';
   mdn?: string;
 }
 
-// CSS 数据项（属性、选择器、规则、单位、类型）
+// CSS 数据项（属性、选择器、规则、单位、函数）
 export type CSSDataItem =
   | CSSPropertyDefinition
   | CSSSelectorDefinition
   | CSSAtRuleDefinition
   | CSSUnitDefinition
-  | CSSTypeDefinition;
+  | CSSFunctionDefinition;
 
 // 当前应用的CSS样式
 export interface AppliedStyle {

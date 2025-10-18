@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 const propertiesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-properties.json'), 'utf-8'));
 const selectorsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-selectors.json'), 'utf-8'));
 const atRulesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-at-rules.json'), 'utf-8'));
+const functionsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-functions.json'), 'utf-8'));
 const unitsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-units.json'), 'utf-8'));
-const typesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'mdn-types.json'), 'utf-8'));
 
 // 分类映射
 const categoryMapping = {
@@ -265,16 +265,17 @@ function processUnits() {
   return processed;
 }
 
-// 处理类型数据
-function processTypes() {
+// 处理函数数据
+function processFunctions() {
   const processed = [];
 
-  for (const [name, data] of Object.entries(typesData)) {
+  for (const [name, data] of Object.entries(functionsData)) {
     if (data.status === 'standard') {
       processed.push({
         name,
-        description: `${name} - ${data.groups?.[0] || 'CSS Type'}`,
-        category: 'types',
+        syntax: data.syntax,
+        description: `${name} - ${data.groups?.[0] || 'CSS Function'}`,
+        category: 'functions',
         mdn: data.mdn_url,
       });
     }
@@ -287,16 +288,16 @@ function processTypes() {
 const properties = processProperties();
 const selectors = processSelectors();
 const atRules = processAtRules();
+const functions = processFunctions();
 const units = processUnits();
-const types = processTypes();
 
 console.log('📊 处理完成:');
 console.log(`  ✅ ${properties.length} 个 CSS 属性`);
 console.log(`  ✅ ${selectors.length} 个 CSS 选择器`);
 console.log(`  ✅ ${atRules.length} 个 At-Rules`);
+console.log(`  ✅ ${functions.length} 个 CSS 函数`);
 console.log(`  ✅ ${units.length} 个单位`);
-console.log(`  ✅ ${types.length} 个类型`);
-console.log(`  📦 总计: ${properties.length + selectors.length + atRules.length + units.length + types.length} 项`);
+console.log(`  📦 总计: ${properties.length + selectors.length + atRules.length + functions.length + units.length} 项`);
 
 // 按分类统计属性
 const categoryStats = {};
@@ -312,15 +313,15 @@ const output = {
   properties,
   selectors,
   atRules,
+  functions,
   units,
-  types,
   metadata: {
     totalProperties: properties.length,
     totalSelectors: selectors.length,
     totalAtRules: atRules.length,
+    totalFunctions: functions.length,
     totalUnits: units.length,
-    totalTypes: types.length,
-    total: properties.length + selectors.length + atRules.length + units.length + types.length,
+    total: properties.length + selectors.length + atRules.length + functions.length + units.length,
     categories: Object.keys(categoryStats),
     processedAt: new Date().toISOString(),
   }

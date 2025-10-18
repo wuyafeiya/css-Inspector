@@ -4,14 +4,14 @@ import type {
   CSSSelectorDefinition,
   CSSAtRuleDefinition,
   CSSUnitDefinition,
-  CSSTypeDefinition,
+  CSSFunctionDefinition,
   CSSDataItem
 } from '../types';
 import processedData from './processed-css-data.json';
 
 // 类型转换和过滤
 export const cssProperties: CSSPropertyDefinition[] = processedData.properties
-  .filter(prop => prop.category !== 'selectors' && prop.category !== 'at-rules' && prop.category !== 'units' && prop.category !== 'types')
+  .filter(prop => prop.category !== 'selectors' && prop.category !== 'at-rules' && prop.category !== 'units' && prop.category !== 'functions')
   .map(prop => ({
     ...prop,
     defaultValue: typeof prop.initial === 'string' ? prop.initial : prop.initial?.[0] || '',
@@ -20,14 +20,14 @@ export const cssProperties: CSSPropertyDefinition[] = processedData.properties
 export const cssSelectors: CSSSelectorDefinition[] = processedData.selectors as CSSSelectorDefinition[];
 export const cssAtRules: CSSAtRuleDefinition[] = processedData.atRules as CSSAtRuleDefinition[];
 export const cssUnits: CSSUnitDefinition[] = processedData.units as CSSUnitDefinition[];
-export const cssTypes: CSSTypeDefinition[] = processedData.types as CSSTypeDefinition[];
+export const cssFunctions: CSSFunctionDefinition[] = processedData.functions as CSSFunctionDefinition[];
 
 export const allCSSData: CSSDataItem[] = [
   ...cssProperties,
   ...cssSelectors,
   ...cssAtRules,
   ...cssUnits,
-  ...cssTypes
+  ...cssFunctions
 ];
 
 // 分类信息
@@ -44,7 +44,7 @@ export const categories = {
   selectors: { label: '选择器', icon: 'fa-crosshairs', count: 0 },
   'at-rules': { label: 'At-Rules', icon: 'fa-at', count: 0 },
   units: { label: '单位', icon: 'fa-ruler-combined', count: 0 },
-  types: { label: '类型', icon: 'fa-code', count: 0 },
+  functions: { label: '函数', icon: 'fa-function', count: 0 },
   other: { label: '其他', icon: 'fa-ellipsis-h', count: 0 },
 };
 
@@ -67,8 +67,8 @@ cssUnits.forEach(() => {
   categories.units.count++;
 });
 
-cssTypes.forEach(() => {
-  categories.types.count++;
+cssFunctions.forEach(() => {
+  categories.functions.count++;
 });
 
 // 元数据
@@ -77,7 +77,7 @@ export const metadata = processedData.metadata;
 console.log('✅ 加载了', cssProperties.length, '个 CSS 属性');
 console.log('✅ 加载了', cssSelectors.length, '个 CSS 选择器');
 console.log('✅ 加载了', cssAtRules.length, '个 At-Rules');
+console.log('✅ 加载了', cssFunctions.length, '个 CSS 函数');
 console.log('✅ 加载了', cssUnits.length, '个单位');
-console.log('✅ 加载了', cssTypes.length, '个类型');
 console.log('📦 总计:', metadata.total, '项');
 
