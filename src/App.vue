@@ -17,9 +17,9 @@
         <PropertyLibrary />
       </aside>
 
-      <!-- 中间：样式面板 -->
-      <section class="style-panel-section">
-        <StylePanel />
+      <!-- 中间：属性详情 -->
+      <section class="property-detail-section">
+        <PropertyDetail />
       </section>
 
       <!-- 右侧：预览面板 -->
@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import PropertyLibrary from './components/PropertyLibrary/PropertyLibrary.vue'
-import StylePanel from './components/StylePanel/StylePanel.vue'
+import PropertyDetail from './components/PropertyDetail/PropertyDetail.vue'
 import PreviewPanel from './components/Preview/PreviewPanel.vue'
 import ThemeToggle from './components/ThemeToggle.vue'
 import { useCSSEditorProvider } from './composables/useCSSEditor'
@@ -107,7 +107,7 @@ onMounted(() => {
 }
 
 .property-library-section,
-.style-panel-section,
+.property-detail-section,
 .preview-panel-section {
   height: 100%;
   overflow: hidden;

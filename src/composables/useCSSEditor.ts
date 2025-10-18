@@ -7,6 +7,7 @@ interface CSSEditorState {
   searchQuery: string;
   selectedCategory: CSSCategory | 'all';
   previewElement: PreviewElementType;
+  selectedProperty: CSSPropertyDefinition | null;
 }
 
 // CSS编辑器状态（Ref 版本）
@@ -15,6 +16,7 @@ interface CSSEditorStateRefs {
   searchQuery: Ref<string>;
   selectedCategory: Ref<CSSCategory | 'all'>;
   previewElement: Ref<PreviewElementType>;
+  selectedProperty: Ref<CSSPropertyDefinition | null>;
 }
 
 // CSS编辑器操作方法
@@ -26,6 +28,7 @@ interface CSSEditorActions {
   setSearchQuery: (query: string) => void;
   setCategory: (category: CSSCategory | 'all') => void;
   setPreviewElement: (element: PreviewElementType) => void;
+  selectProperty: (property: CSSPropertyDefinition | null) => void;
   getComputedStyles: () => Record<string, string>;
 }
 
@@ -41,6 +44,7 @@ export function useCSSEditorProvider() {
     searchQuery: '',
     selectedCategory: 'all',
     previewElement: 'box',
+    selectedProperty: null,
   });
 
   // 添加样式
@@ -91,6 +95,11 @@ export function useCSSEditorProvider() {
     state.previewElement = element;
   };
 
+  // 选择属性
+  const selectProperty = (property: CSSPropertyDefinition | null) => {
+    state.selectedProperty = property;
+  };
+
   // 获取计算后的样式对象
   const getComputedStyles = (): Record<string, string> => {
     const styles: Record<string, string> = {};
@@ -125,6 +134,7 @@ export function useCSSEditorProvider() {
     setSearchQuery,
     setCategory,
     setPreviewElement,
+    selectProperty,
     getComputedStyles,
   } as CSSEditorContext;
 

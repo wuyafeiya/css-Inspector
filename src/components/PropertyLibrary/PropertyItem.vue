@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['property-item', { disabled: isApplied }]"
+    class="property-item"
     @click="handleClick"
   >
     <div class="property-header">
@@ -21,17 +21,10 @@ const props = defineProps<{
   property: CSSPropertyDefinition;
 }>();
 
-const { appliedStyles, addStyle } = useCSSEditor();
-
-const isApplied = computed(() => {
-  return appliedStyles.value.some(s => s.property === props.property.name);
-});
+const { selectProperty } = useCSSEditor();
 
 const handleClick = () => {
-  if (!isApplied.value) {
-    const defaultValue = props.property.defaultValue || props.property.initial || '';
-    addStyle(props.property, typeof defaultValue === 'string' ? defaultValue : defaultValue[0] || '');
-  }
+  selectProperty(props.property);
 };
 
 const categoryLabel = computed(() => {
@@ -54,18 +47,6 @@ const categoryLabel = computed(() => {
   border-color: var(--color-primary);
   box-shadow: var(--shadow-sm);
   transform: translateX(2px);
-}
-
-.property-item.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--color-bg-secondary);
-}
-
-.property-item.disabled:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: var(--color-border-primary);
 }
 
 .property-header {
