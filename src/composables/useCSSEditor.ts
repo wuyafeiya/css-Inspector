@@ -106,8 +106,8 @@ export function useCSSEditorProvider() {
 
     state.appliedStyles.forEach(({ property, value }) => {
       // 处理 transform 类型属性
-      if (property.startsWith('transform:')) {
-        const transformType = property.split(':')[1].trim();
+      if (property && property.startsWith('transform:')) {
+        const transformType = property.split(':')[1]?.trim();
         if (!styles.transform) {
           styles.transform = '';
         }
@@ -117,7 +117,7 @@ export function useCSSEditorProvider() {
         } else if (transformType === 'scale') {
           styles.transform += ` scale(${value})`;
         }
-      } else {
+      } else if (property) {
         styles[property] = value;
       }
     });

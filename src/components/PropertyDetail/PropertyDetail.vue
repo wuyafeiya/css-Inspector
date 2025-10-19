@@ -124,7 +124,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useCSSEditor } from '../../composables/useCSSEditor';
 import { categories } from '../../data/cssData';
 import { cssProperties } from '../../data/cssData';
@@ -133,7 +132,7 @@ import type { CSSPropertyDefinition } from '../../types';
 const { selectedProperty, selectProperty } = useCSSEditor();
 
 const getCategoryLabel = (category: string) => {
-  return categories[category]?.label || category;
+  return categories[category as keyof typeof categories]?.label || category;
 };
 
 const getExampleValue = (property: CSSPropertyDefinition) => {

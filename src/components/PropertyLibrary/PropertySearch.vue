@@ -69,7 +69,6 @@ import { ref, computed } from 'vue';
 import { useCSSEditor } from '../../composables/useCSSEditor';
 import { cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions } from '../../data/cssData';
 import { categories } from '../../data/cssData';
-import type { CSSPropertyDefinition } from '../../types';
 
 const { searchQuery, setSearchQuery, selectProperty } = useCSSEditor();
 
@@ -181,7 +180,7 @@ const getResultIcon = (category: string) => {
 };
 
 const getCategoryLabel = (category: string) => {
-  return categories[category]?.label || category;
+  return categories[category as keyof typeof categories]?.label || category;
 };
 </script>
 

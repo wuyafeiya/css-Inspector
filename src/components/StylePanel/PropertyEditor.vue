@@ -139,7 +139,7 @@ const emit = defineEmits<{
 // 提取数字值 (去除单位)
 const numericValue = computed(() => {
   const match = props.modelValue.match(/^(-?\d+\.?\d*)/);
-  return match ? parseFloat(match[1]) : 0;
+  return match && match[1] ? parseFloat(match[1]) : 0;
 });
 
 const handleColorChange = (e: Event) => {

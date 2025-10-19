@@ -110,7 +110,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions, allCSSData } from '../../data/cssData';
+import { categories, cssProperties, cssSelectors, cssAtRules, cssUnits, cssFunctions } from '../../data/cssData';
 import { useCSSEditor } from '../../composables/useCSSEditor';
 import PropertyItem from './PropertyItem.vue';
 import ColorPalette from './ColorPalette.vue';
